@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+  <node pkg="gtest_sandbox" name="my_node" type="my_node"/>
+  <test pkg="gtest_sandbox" test-name="utest" type="utest"/>
+</launch>

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(gtest_sandbox)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -104,7 +104,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES gtest_sandbox
-#  CATKIN_DEPENDS roscpp std_msgs
+  CATKIN_DEPENDS roscpp std_msgs
 #  DEPENDS system_lib
 )
 
@@ -115,7 +115,8 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
+  include/${PROJECT_NAME}
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -148,7 +149,24 @@ include_directories(
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
+##############
+# Executables
+##############
+# An example of a ROS node.
+add_executable(my_node src/main.cpp)
+target_link_libraries(my_node ${catkin_LIBRARIES})
 
+##############
+# Unit Tests
+##############
+
+if(CATKIN_ENABLE_TESTING)
+  message("\n\nGoing to build the tests!\n\n")
+  find_package(rostest REQUIRED)
+  add_rostest_gtest(utest launch/utest.launch test/utest.cpp)
+  # catkin_add_gtest(utest test/MyClass_test.cpp)
+  target_link_libraries(utest ${catkin_LIBRARIES})
+endif()
 #############
 ## Install ##
 #############
